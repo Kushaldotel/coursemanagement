@@ -79,3 +79,18 @@ class MCQChoice(models.Model):
 
     def __str__(self):
         return f"{self.choice_text} - {'Correct' if self.is_correct else 'Incorrect'}"
+
+
+class Enrollment(models.Model):
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name="enrollments")
+    course = models.ForeignKey("Course", on_delete=models.CASCADE, related_name="enrollments")
+    enrolled_at = models.DateTimeField(auto_now_add=True)
+    progress = models.FloatField(default=0.0)  # Track progress percentage
+    is_completed = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ("student", "course")  # Prevent duplicate enrollments
+        ordering = ["-enrolled_at"]
+
+    def __str__(self):
+        return f"{self.student.email} -> {self.course.title}"

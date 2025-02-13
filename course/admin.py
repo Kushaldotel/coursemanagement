@@ -1,6 +1,6 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin
-from .models import Category, Course, CourseContent, MCQQuestion, MCQChoice
+from .models import Category, Course, CourseContent, MCQQuestion, MCQChoice, Enrollment
 
 @admin.register(Category)
 class CategoryAdmin(ModelAdmin):
@@ -42,3 +42,17 @@ class MCQChoiceAdmin(ModelAdmin):
     list_filter = ("is_correct",)
     search_fields = ("choice_text",)
     ordering = ["question"]
+
+@admin.register(Enrollment)
+class EnrollmentAdmin(ModelAdmin):
+    list_display = ("student", "course", "enrolled_at", "progress", "is_completed")
+    search_fields = ("student__email", "course__title")
+    list_filter = ("is_completed", "course")
+    ordering = ["-enrolled_at"]
+    autocomplete_fields = ["student", "course"]
+    actions = ["mark_as_completed"]
+
+    def mark_as_completed(self, request, queryset):
+        queryset.update(is_completed=True, progress=100)
+        self.message_user(request, "Selected enrollments marked as completed!")
+    mark_as_completed.short_description = "Mark selected enrollments as completed"
