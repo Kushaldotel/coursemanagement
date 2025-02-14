@@ -3,7 +3,7 @@ from .models import Category, Course, MCQChoice, MCQQuestion, CourseContent, Enr
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
-# 🔹 Category Serializer (Nested for 2-Level Structure)
+
 class CategorySerializer(serializers.ModelSerializer):
     subcategories = serializers.SerializerMethodField()
 
@@ -44,7 +44,7 @@ class CourseSerializer(serializers.ModelSerializer):
             if content.text
         ]
 
-# 🔹 MCQ Serializer (Includes Choices & Answers)
+
 class MCQChoiceSerializer(serializers.ModelSerializer):
     """Serializer for MCQ Choices"""
     class Meta:
@@ -62,12 +62,12 @@ class MCQQuestionSerializer(serializers.ModelSerializer):
 class EnrolledStudentSerializer(serializers.ModelSerializer):
     """Serializer to return student details"""
     class Meta:
-        model = User  # Assuming User is your student model
-        fields = ["id", "email"]
+        model = User
+        fields = ["id", "email", "first_name", "last_name"]
 
 class CourseEnrollmentSerializer(serializers.ModelSerializer):
     """Serializer to return course details along with enrolled students"""
-    students = serializers.SerializerMethodField()  # ✅ Fetch students dynamically
+    students = serializers.SerializerMethodField()
 
     class Meta:
         model = Course

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enrolled Students</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .course {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+        .course h3 {
+            color: #007bff;
+        }
+        .students-list {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+        .student {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>List of Enrolled Students</h2>
+        <div id="courses-container"></div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("/course/enrollments/")
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.data.results.length > 0) {
+                        const coursesContainer = document.getElementById("courses-container");
+                        data.data.results.forEach(course => {
+                            const courseDiv = document.createElement("div");
+                            courseDiv.classList.add("course");
+
+                            let studentsHtml = "<ul class='students-list'>";
+                            if (course.students.length > 0) {
+                                course.students.forEach(student => {
+                                    studentsHtml += `<li class="student">${student.first_name} ${student.last_name} (${student.email})</li>`;
+                                });
+                            } else {
+                                studentsHtml += "<li class='student'>No students enrolled</li>";
+                            }
+                            studentsHtml += "</ul>";
+
+                            courseDiv.innerHTML = `
+                                <h3>${course.title}</h3>
+                                ${studentsHtml}
+                            `;
+                            coursesContainer.appendChild(courseDiv);
+                        });
+                    } else {
+                        document.getElementById("courses-container").innerHTML = "<p>No courses found.</p>";
+                    }
+                })
+                .catch(error => console.error("Error fetching courses:", error));
+        });
+    </script>
+
+</body>
+</html>

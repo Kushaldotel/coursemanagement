@@ -3,18 +3,16 @@ from .models import Category, Course, MCQQuestion
 from .serializers import CategorySerializer, CourseSerializer, MCQChoiceSerializer, MCQQuestionSerializer,CourseEnrollmentSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.shortcuts import render
 
-# 🔹 Category List API
 class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.filter(parent=None)
     serializer_class = CategorySerializer
 
-# 🔹 Course List API
 class CourseListView(generics.ListAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
-# 🔹 MCQ List API for a Specific Course
 class MCQQuestionListAPIView(generics.ListAPIView):
     """API View to get all MCQ questions with choices"""
     queryset = MCQQuestion.objects.all()
@@ -33,3 +31,8 @@ class CourseEnrollmentListAPIView(generics.ListAPIView):
     """API View to fetch all courses with enrolled students"""
     queryset = Course.objects.all()
     serializer_class = CourseEnrollmentSerializer
+
+
+def course_enrollment_page(request):
+    """View to render the course enrollment page"""
+    return render(request, "enrollments.html")
