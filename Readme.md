@@ -51,11 +51,11 @@ pip install -r requirements.txt
 python manage.py migrate
 
 
-### 5️⃣ Create a Superuser (Optional for Admin Access)
+### Create a Superuser (Optional for Admin Access)
 python manage.py createsuperuser
 
 
-### 6️⃣ Run the Development Server
+### Run the Development Server
 python manage.py runserver
 
 
