@@ -4,6 +4,7 @@ from .serializers import CategorySerializer, CourseSerializer, MCQChoiceSerializ
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import render
+from django.contrib.admin.views.decorators import staff_member_required
 
 class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.filter(parent=None)
@@ -32,7 +33,7 @@ class CourseEnrollmentListAPIView(generics.ListAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseEnrollmentSerializer
 
-
+@staff_member_required  # Ensures only admin users can access the page. Make sure to login first in admin panel and come to this api.
 def course_enrollment_page(request):
     """View to render the course enrollment page"""
     return render(request, "enrollments.html")
