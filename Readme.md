@@ -2,6 +2,19 @@
 
 This project provides a Course Enrollment System with REST API endpoints for managing courses and students. Additionally, it includes a frontend interface for student enrollment and viewing enrolled students.
 
+## Setup Instructions (Docker)
+
+### Clone the Repository
+
+git clone https://github.com/Kushaldotel/coursemanagement.git
+cd coursemanagement
+cd managecourse
+
+### Docker command to follow
+
+- docker-compose up --build
+- docker-compose exec web python manage.py createsuperuser (to create a superuser)
+- Then navigate to the urls mentioned below in API Endpoints
 
 ## Setup Instructions (Local Development)
 
@@ -23,6 +36,7 @@ Make sure to have this in a .env file inside managecourse folder
 - DB_NAME='your_db_name'
 - DB_USER='Your_user'
 - DB_PASSWORD='your_password'
+- DB_HOST=localhost # as you are running locally
 
 
 - EMAIL_HOST_USER='your_email'
