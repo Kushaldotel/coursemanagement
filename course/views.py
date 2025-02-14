@@ -1,6 +1,6 @@
 from rest_framework import generics
 from .models import Category, Course, MCQQuestion
-from .serializers import CategorySerializer, CourseSerializer, MCQChoiceSerializer, MCQQuestionSerializer
+from .serializers import CategorySerializer, CourseSerializer, MCQChoiceSerializer, MCQQuestionSerializer,CourseEnrollmentSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -28,3 +28,8 @@ class MCQQuestionByCourseAPIView(generics.ListAPIView):
     def get_queryset(self):
         course_id = self.kwargs["course_id"]
         return MCQQuestion.objects.filter(course_content__course_id=course_id)
+
+class CourseEnrollmentListAPIView(generics.ListAPIView):
+    """API View to fetch all courses with enrolled students"""
+    queryset = Course.objects.all()
+    serializer_class = CourseEnrollmentSerializer

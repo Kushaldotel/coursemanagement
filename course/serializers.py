@@ -1,6 +1,8 @@
 from rest_framework import serializers
-from .models import Category, Course, MCQChoice, MCQQuestion, CourseContent
+from .models import Category, Course, MCQChoice, MCQQuestion, CourseContent, Enrollment
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 # 🔹 Category Serializer (Nested for 2-Level Structure)
 class CategorySerializer(serializers.ModelSerializer):
     subcategories = serializers.SerializerMethodField()
@@ -56,3 +58,24 @@ class MCQQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = MCQQuestion
         fields = ["id", "question_text", "choices"]
+
+class EnrolledStudentSerializer(serializers.ModelSerializer):
+    """Serializer to return student details"""
+    class Meta:
+        model = User  # Assuming User is your student model
+        fields = ["id", "email"]
+
+class CourseEnrollmentSerializer(serializers.ModelSerializer):
+    """Serializer to return course details along with enrolled students"""
+    students = serializers.SerializerMethodField()  # ✅ Fetch students dynamically
+
+    class Meta:
+        model = Course
+        fields = ["id", "title", "students"]
+
+    def get_students(self, obj):
+        """Fetch students enrolled in the course"""
+        enrollments = Enrollment.objects.filter(course=obj)
+        students = [enrollment.student for enrollment in enrollments]
+        return EnrolledStudentSerializer(students, many=True).data
+
