@@ -23,8 +23,8 @@ class CreateStudentView(APIView):
 
         if serializer.is_valid():
             user = serializer.save()
-            user._raw_password = raw_password  # Temporarily attach password before saving
-            post_save.send(sender=StudentUser, instance=user, created=True)  # Manually trigger signal
+            user._raw_password = raw_password
+            post_save.send(sender=StudentUser, instance=user, created=True)
             return Response({"message": "Student created successfully!"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
