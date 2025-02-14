@@ -92,3 +92,6 @@ python manage.py runserver
 - Frontend: HTML, CSS, JavaScript (Fetch API)
 - Database: PostgreSQL
 - Admin: django-unfold
+
+
+## You can find how projects looks like at project-screenshots folder too in case you wish to see
